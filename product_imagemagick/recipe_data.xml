@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="img_product_canvas_size" model="image.recipe">
+            <field name="name">Product Canvas Size</field>
+            <field name="description">Define the canvas size to limit the image maximum size.</field>
+            <field name="recipe">if image.width &gt;= image.height:
+    image.transform(resize='%sx%s>' %(int(canvas_size), int(float(canvas_size)/float(image.width)*float(image.height))))
+else:
+    image.transform(resize='%sx%s>' %(int(float(canvas_size)/float(image.height)*float(image.width)), int(canvas_size)))
+            </field>
+        </record>
+
+        <record id="img_product_canvas_size_param_canvas" model="image.recipe.param">
+            <field name="name">canvas_size</field>
+            <field name="value">500</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_canvas_size"/>
+        </record>
+
+        <record id="img_product_cropped" model="image.recipe">
+            <field name="name">Product Cropped</field>
+            <field name="description">Define the canvas size to limit the image maximum size.
+Define the aspect ratio to resize the image.
+E.g. horizontal=1920, vertical=1080. The aspect ratio will be 16:9.
+PS: The canvas will always be the given size</field>
+            <field name="recipe">if float(image.width)/image.height &gt;= float(horizontal)/float(vertical):
+    image.transform(resize='%sx>' %int(float(image.width)/image.height*image.width))
+    image.crop(width=int(float(horizontal)/float(vertical)*image.height), height=image.height, gravity='center')
+    image.resize(int(canvas_size), int(float(canvas_size)*float(vertical)/float(horizontal)))
+else:
+    image.transform(resize='%sx>' %int(float(horizontal)/float(vertical)*image.width))
+    image.crop(width=image.width, height=int(float(vertical)/float(horizontal)*image.width), gravity='center')
+    image.resize(int(float(canvas_size)*float(horizontal)/float(vertical)), int(canvas_size))
+            </field>
+        </record>
+
+        <record id="img_product_cropped_param_canvas" model="image.recipe.param">
+            <field name="name">canvas_size</field>
+            <field name="value">800</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_cropped"/>
+        </record>
+
+        <record id="img_product_cropped_param_horizontal" model="image.recipe.param">
+            <field name="name">horizontal</field>
+            <field name="value">1</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_cropped"/>
+        </record>
+
+        <record id="img_product_cropped_param_vertical" model="image.recipe.param">
+            <field name="name">vertical</field>
+            <field name="value">1</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_cropped"/>
+        </record>
+
+        <record id="img_product_watermark_center" model="image.recipe">
+            <field name="name">Product With Watermark In Center</field>
+            <field name="description">Define the canvas size to limit the image maximum size.
+Define the aspect ratio to resize the image.
+Define the watermark image.
+Define the watermark image width (watermark image will hold the original ratio).
+E.g. horizontal=1920, vertical=1080. The aspect ratio will be 16:9.
+PS: The canvas will always be the given size</field>
+            <field name="recipe">if image.width &gt;= image.height:
+    image.transform(resize='%sx%s>' %(int(canvas_size), int(float(canvas_size)/float(image.width)*float(image.height))))
+else:
+    image.transform(resize='%sx%s>' %(int(float(canvas_size)/float(image.height)*float(image.width)), int(canvas_size)))
+wk_img = Image(filename=wk)
+if wk_img.width &gt;= wk_img.height:
+    wk_img.transform(resize='%sx%s>' %(int(wk_canvas_size), int(float(wk_canvas_size)/float(wk_img.width)*float(wk_img.height))))
+else:
+    wk_img.transform(resize='%sx%s>' %(int(float(wk_canvas_size)/float(wk_img.height)*float(wk_img.width)), int(wk_canvas_size)))
+image.watermark(wk_img, transparency=float(wk_trans), left=int((float(image.width)/2-float(wk_img.width)/2)), top=int((float(image.height)/2-float(wk_img.height)/2)))
+            </field>
+        </record>
+
+        <record id="img_product_watermark_center_param_canvas" model="image.recipe.param">
+            <field name="name">canvas_size</field>
+            <field name="value">1920</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_center"/>
+        </record>
+
+        <record id="img_product_watermark_center_param_horizontal" model="image.recipe.param">
+            <field name="name">horizontal</field>
+            <field name="value">1</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_center"/>
+        </record>
+
+        <record id="img_product_watermark_center_param_vertical" model="image.recipe.param">
+            <field name="name">vertical</field>
+            <field name="value">1</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_center"/>
+        </record>
+
+        <record id="img_product_watermark_center_param_wk" model="image.recipe.param">
+            <field name="name">wk</field>
+            <field name="value">/usr/share/odoo-product/product_imagemagick/static/src/img/logo.png</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_center"/>
+        </record>
+
+        <record id="img_product_watermark_center_param_wk_trans" model="image.recipe.param">
+            <field name="name">wk_trans</field>
+            <field name="value">0.2</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_center"/>
+        </record>
+
+        <record id="img_product_watermark_center_param_wk_width" model="image.recipe.param">
+            <field name="name">wk_canvas_size</field>
+            <field name="value">100</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_center"/>
+        </record>
+
+        <record id="img_product_watermark_right_bottom" model="image.recipe">
+            <field name="name">Product With Watermark In Right Bottom</field>
+            <field name="description">Define the canvas size to limit the image maximum size.
+Define the aspect ratio to resize the image.
+Define the watermark image.
+Define the watermark image width (watermark image will hold the original ratio).
+E.g. horizontal=1920, vertical=1080. The aspect ratio will be 16:9.
+PS: The canvas will always be the given size</field>
+            <field name="recipe">if image.width &gt;= image.height:
+    image.transform(resize='%sx%s>' %(int(canvas_size), int(float(canvas_size)/float(image.width)*float(image.height))))
+else:
+    image.transform(resize='%sx%s>' %(int(float(canvas_size)/float(image.height)*float(image.width)), int(canvas_size)))
+wk_img = Image(filename=wk)
+if wk_img.width &gt;= wk_img.height:
+    wk_img.transform(resize='%sx%s>' %(int(wk_canvas_size), int(float(wk_canvas_size)/float(wk_img.width)*float(wk_img.height))))
+else:
+    wk_img.transform(resize='%sx%s>' %(int(float(wk_canvas_size)/float(wk_img.height)*float(wk_img.width)), int(wk_canvas_size)))
+image.watermark(wk_img, transparency=float(wk_trans), left=image.width-wk_img.width-int(wk_margin_to_frame), top=image.height-wk_img.height-int(wk_margin_to_frame))
+            </field>
+        </record>
+
+        <record id="img_product_watermark_right_bottom_param_canvas" model="image.recipe.param">
+            <field name="name">canvas_size</field>
+            <field name="value">1920</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_right_bottom"/>
+        </record>
+
+        <record id="img_product_watermark_right_bottom_param_horizontal" model="image.recipe.param">
+            <field name="name">horizontal</field>
+            <field name="value">1</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_right_bottom"/>
+        </record>
+
+        <record id="img_product_watermark_right_bottom_param_vertical" model="image.recipe.param">
+            <field name="name">vertical</field>
+            <field name="value">1</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_right_bottom"/>
+        </record>
+
+        <record id="img_product_watermark_right_bottom_param_wk" model="image.recipe.param">
+            <field name="name">wk</field>
+            <field name="value">/usr/share/odoo-product/product_imagemagick/static/src/img/logo.png</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_right_bottom"/>
+        </record>
+
+        <record id="img_product_watermark_right_bottom_param_wk_trans" model="image.recipe.param">
+            <field name="name">wk_trans</field>
+            <field name="value">0.2</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_right_bottom"/>
+        </record>
+
+        <record id="img_product_watermark_right_bottom_param_wk_width" model="image.recipe.param">
+            <field name="name">wk_canvas_size</field>
+            <field name="value">100</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_right_bottom"/>
+        </record>
+
+        <record id="img_product_watermark_right_bottom_param_wk_margin_to_frame" model="image.recipe.param">
+            <field name="name">wk_margin_to_frame</field>
+            <field name="value">30</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_watermark_right_bottom"/>
+        </record>
+
+    </data>
+</openerp>
