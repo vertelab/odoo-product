@@ -24,10 +24,11 @@
     'version': '0.1',
     'category': 'product',
     'summary': 'Print product sheets ',
-    'description': """Product Sheets for print
-
+    'description': """
+Product Sheets for print
+========================
 Financed by Runex AB
-       """.
+       """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['product', 'report_scribus'],
