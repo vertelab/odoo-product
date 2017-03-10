@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-  <data noupdate="0"> <!-- TODO: Change to 1. Please remember this time... -->
+  <data noupdate="0">
 
     <report
         string="Product Sheet"
