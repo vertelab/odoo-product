@@ -34,6 +34,10 @@ class crm_tracking_campaign(models.Model):
     def _product_names(self):
         self.product_names = ', '.join(self.product_ids.mapped('name'))
     product_names = fields.Char(compute='_product_names')
+    @api.one
+    def _product_count(self):
+        self.product_count = len(self.product_ids)
+    product_count = fields.Integer(compute='_product_count')
 
 
 class product_crm_campaign(models.Model):
