@@ -44,7 +44,7 @@ class product_crm_campaign(models.Model):
     _name = 'product.crm.campaign'
 
     name = fields.Char(related='product_id.name')
-    sequence = fields.Integer(string='Sequence')
+    sequence = fields.Integer()
     color = fields.Integer('Color Index')
     product_categ_id = fields.Many2one(comodel_name='product.category', related='product_id.categ_id', string='Category', store=True)
     campaign_id = fields.Many2one(comodel_name='crm.tracking.campaign', string='Campaign')
