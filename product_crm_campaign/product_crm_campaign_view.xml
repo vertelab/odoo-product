@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="product_crm_campaign_tree" model="ir.ui.view">
+            <field name="name">product.crm.campaign.tree</field>
+            <field name="model">product.crm.campaign</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sequence"/>
+                    <field name="campaign_id"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_crm_campaign_view" model="ir.ui.view">
+            <field name="name">product.crm.campaign.form</field>
+            <field name="model">product.crm.campaign</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Product CRM Campaign">
+                    <sheet string="Product CRM Campaign">
+                        <group>
+                            <field name="sequence" widget="handle"/>
+                            <field name="campaign_id"/>
+                            <field name="product_id"/>
+                            <field name="product_categ_id"/>
+                            <field name="color"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_crm_campaign_kanban" model="ir.ui.view">
+            <field name="name">product.crm.campaign.kanban</field>
+            <field name="model">product.crm.campaign</field>
+            <field name="type">kanban</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="campaign_id">
+                    <field name="color"/>
+                    <field name="product_categ_id"/>
+                    <field name="campaign_id"/>
+                    <field name="product_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user">
+                                <span class="oe_e">í</span>
+                                <ul class="oe_dropdown_menu">
+                                    <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit...</a></li></t>
+                                    <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t>
+                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                </ul>
+                            </div>
+                            <div class="oe_kanban_content">
+                                <div><field name="campaign_id"/></div>
+                                <div><field name="product_id"/></div>
+                                <div><field name="product_categ_id"/></div>
+                            </div>
+                            <div class="oe_clear"></div>
+                        </div>
+                    </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="product_crm_campaign_search" model="ir.ui.view">
+            <field name="name">product.crm.campaign.search</field>
+            <field name="model">product.crm.campaign</field>
+            <field name="arch" type="xml">
+                <search string="Product Campaign">
+                    <field name="campaign_id"/>
+                    <group expand="1" string="Group By">
+                        <filter context="{'group_by' : 'campaign_id'}" string="Campaign"/>
+                        <filter context="{'group_by' : 'product_id'}" string="Product"/>
+                        <filter context="{'group_by' : 'product_categ_id'}" string="Category"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_product_crm_campaign_view" model="ir.actions.act_window">
+            <field name="name">product.crm.campaign.act</field>
+            <field name="res_model">product.crm.campaign</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban,calendar,gantt</field>
+            <field name="context">{"search_default_current": 1}</field>
+        </record>
+
+        <record id="crm_tracking_campaign_tree" model="ir.ui.view">
+            <field name="name">crm.tracking.campaign.tree.inherited.product_crm_campaign</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="inherit_id" ref="crm.crm_tracking_campaign_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="date_start"/>
+                    <field name="date_stop"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="crm_tracking_campaign_form" model="ir.ui.view">
+            <field name="name">crm.tracking.campaign.form</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="priority" eval="10"/>
+            <field name="arch" type="xml">
+                <form string="Campaign">
+                    <sheet>
+                        <group>
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Name" />
+                            </h1>
+                            <button class="oe_inline oe_stat_button" type="action" icon="fa-trophy" name="%(action_product_crm_campaign_view)d" string="Products" context="{'search_default_campaign_id': active_id}"/>
+                            <field name="date_start"/>
+                            <field name="date_stop"/>
+                            <field name="section_id" groups="base.group_multi_salesteams"/>
+                            <field name="product_ids" widget="many2many_tags"/>
+                        </group>
+                        <notebook>
+                            <page string="Information">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="crm_tracking_campaign_calendar" model="ir.ui.view">
+            <field name="name">crm.tracking.campaign.calendar</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="arch" type="xml">
+                <calendar string="CRM Tracking Campaign" color="color" date_start="date_start" date_stop="date_stop">
+                    <field name="name"/>
+                    <field name="product_names"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="crm_tracking_campaign_gantt" model="ir.ui.view">
+            <field name="name">crm.tracking.campaign.gantt</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="type">gantt</field>
+            <field name="arch" type="xml">
+                <gantt date_start="date_start" date_stop="date_stop" string="Campaigns">
+                </gantt>
+            </field>
+        </record>
+
+        <record id="crm_tracking_campaign_search" model="ir.ui.view">
+            <field name="name">crm.tracking.campaign.search</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="arch" type="xml">
+                <search string="CRM Tracking Campaign">
+                   <field name="name" string="Name" filter_domain="[('display_name','ilike',self)]"/>
+                   <group expand="1" string="Group By">
+                        <filter context="{'group_by' : 'product_ids'}" string="Products"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="crm.crm_tracking_campaign_act" model="ir.actions.act_window">
+            <field name="view_mode">tree,form,calendar,gantt</field>
+        </record>
+
+        <record id="product_template_form_view" model="ir.ui.view">
+            <field name="name">product.template.common.form.inherited.product_crm_campaign</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <separator string="Description for Quotations" position="before">
+                    <field name="campaign_ids" widget="many2many_tags"/>
+                </separator>
+            </field>
+        </record>
+
+    </data>
+</openerp>
