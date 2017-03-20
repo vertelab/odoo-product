@@ -1,0 +1,1 @@
+import object_crm_campaign

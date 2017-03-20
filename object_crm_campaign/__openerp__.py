@@ -20,19 +20,20 @@
 ##############################################################################
 
 {
-    'name': 'Product CRM Campaign',
+    'name': 'Object CRM Campaign',
     'version': '0.1',
     'category': 'crm',
     'description': """
-Bind together crm.tracking.campaign with product template, variant
-==================================================================
+Bind together crm.tracking.campaign with different object
+=========================================================
 
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['object_crm_campaign', 'website_sale'],
+    'depends': ['crm'],
     'data': [
-        'product_view.xml',
+        'object_crm_campaign_view.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
 }

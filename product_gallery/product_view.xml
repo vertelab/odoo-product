@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <template id="product" inherit_id="website_sale.product">
+            <xpath expr="//span[@itemprop='image']" position="after">
+                <t t-call="product_gallery.product_gallery"/>
+            </xpath>
+        </template>
+
+        <template id="product_gallery">
+<!--
+            <div class="container">
+                <div
+            </div>
+-->
+        </template>
+
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Website assets - Product Gallery">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/product_gallery/static/src/css/gallery.css" t-ignore="true"/>
+                <script type="text/javascript" src="/product_gallery/static/src/js/gallery.js"></script>
+            </xpath>
+        </template>
+
+    </data>
+</openerp>

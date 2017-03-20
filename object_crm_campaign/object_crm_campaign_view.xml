@@ -2,48 +2,57 @@
 <openerp>
     <data>
 
-        <record id="product_crm_campaign_tree" model="ir.ui.view">
-            <field name="name">product.crm.campaign.tree</field>
-            <field name="model">product.crm.campaign</field>
+        <record id="object_crm_campaign_tree" model="ir.ui.view">
+            <field name="name">object.crm.campaign.tree</field>
+            <field name="model">object.crm.campaign</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="sequence"/>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
                     <field name="campaign_id"/>
-                    <field name="product_id"/>
+                    <field name="object_id"/>
                 </tree>
             </field>
         </record>
 
-        <record id="product_crm_campaign_view" model="ir.ui.view">
-            <field name="name">product.crm.campaign.form</field>
-            <field name="model">product.crm.campaign</field>
+        <record id="object_crm_campaign_view" model="ir.ui.view">
+            <field name="name">object.crm.campaign.form</field>
+            <field name="model">object.crm.campaign</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Product CRM Campaign">
-                    <sheet string="Product CRM Campaign">
-                        <group>
-                            <field name="sequence" widget="handle"/>
-                            <field name="campaign_id"/>
-                            <field name="product_id"/>
-                            <field name="product_categ_id" readonly="1"/>
-                            <field name="color"/>
-                        </group>
+                <form string="Object CRM Campaign">
+                    <sheet string="Object CRM Campaign">
+                        <field name="image" widget="image" class="oe_avatar oe_right"/>
+                        <div class="oe_left">
+                            <group>
+                                <field name="name"/>
+                                <field name="sequence"/>
+                                <field name="campaign_id"/>
+                                <field name="object_id"/>
+                                <field name="color"/>
+                            </group>
+                        </div>
+                        <notebook>
+                            <page string="Information">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="product_crm_campaign_kanban" model="ir.ui.view">
-            <field name="name">product.crm.campaign.kanban</field>
-            <field name="model">product.crm.campaign</field>
+        <record id="object_crm_campaign_kanban" model="ir.ui.view">
+            <field name="name">object.crm.campaign.kanban</field>
+            <field name="model">object.crm.campaign</field>
             <field name="type">kanban</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="campaign_id">
                     <field name="color"/>
-                    <field name="product_categ_id"/>
                     <field name="campaign_id"/>
-                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="object_id"/>
                     <templates>
                         <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
@@ -57,8 +66,8 @@
                             </div>
                             <div class="oe_kanban_content">
                                 <div><b>Campaign:</b> <field name="campaign_id"/></div>
-                                <div><b>Product:</b> <field name="product_id"/></div>
-                                <div><b>Category:</b> <field name="product_categ_id"/></div>
+                                <div><b>Name:</b> <field name="name"/></div>
+                                <div><b>Object:</b> <field name="object_id"/></div>
                             </div>
                             <div class="oe_clear"></div>
                         </div>
@@ -68,31 +77,30 @@
             </field>
         </record>
 
-        <record id="product_crm_campaign_search" model="ir.ui.view">
-            <field name="name">product.crm.campaign.search</field>
-            <field name="model">product.crm.campaign</field>
+        <record id="object_crm_campaign_search" model="ir.ui.view">
+            <field name="name">object.crm.campaign.search</field>
+            <field name="model">object.crm.campaign</field>
             <field name="arch" type="xml">
-                <search string="Product Campaign">
+                <search string="Object Campaign">
                     <field name="campaign_id"/>
                     <group expand="1" string="Group By">
                         <filter context="{'group_by' : 'campaign_id'}" string="Campaign"/>
-                        <filter context="{'group_by' : 'product_id'}" string="Product"/>
-                        <filter context="{'group_by' : 'product_categ_id'}" string="Category"/>
+                        <filter context="{'group_by' : 'object_id'}" string="Object"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record id="action_product_crm_campaign_view" model="ir.actions.act_window">
-            <field name="name">product.crm.campaign.act</field>
-            <field name="res_model">product.crm.campaign</field>
+        <record id="action_object_crm_campaign_view" model="ir.actions.act_window">
+            <field name="name">object.crm.campaign.act</field>
+            <field name="res_model">object.crm.campaign</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,kanban</field>
             <field name="context">{"search_default_current": 1}</field>
         </record>
 
         <record id="crm_tracking_campaign_tree" model="ir.ui.view">
-            <field name="name">crm.tracking.campaign.tree.inherited.product_crm_campaign</field>
+            <field name="name">crm.tracking.campaign.tree.inherited.object_crm_campaign</field>
             <field name="model">crm.tracking.campaign</field>
             <field name="inherit_id" ref="crm.crm_tracking_campaign_tree"/>
             <field name="arch" type="xml">
@@ -114,13 +122,13 @@
                             <h1>
                                 <field name="name" default_focus="1" placeholder="Name" />
                             </h1>
-                            <button class="oe_inline oe_stat_button" type="action" icon="fa-dropbox" name="%(action_product_crm_campaign_view)d" context="{'search_default_campaign_id': active_id}">
-                                <field string="Products" name="product_count" widget="statinfo"/>
+                            <button class="oe_inline oe_stat_button" type="action" icon="fa-dropbox" name="%(action_object_crm_campaign_view)d" context="{'search_default_campaign_id': active_id}">
+                                <field string="Objects" name="object_count" widget="statinfo"/>
                             </button>
                             <field name="date_start"/>
                             <field name="date_stop"/>
                             <field name="section_id" groups="base.group_multi_salesteams"/>
-                            <field name="product_ids" widget="many2many_tags"/>
+                            <field name="object_ids" widget="many2many_tags"/>
                         </group>
                         <notebook>
                             <page string="Information">
@@ -136,9 +144,9 @@
             <field name="name">crm.tracking.campaign.calendar</field>
             <field name="model">crm.tracking.campaign</field>
             <field name="arch" type="xml">
-                <calendar string="CRM Tracking Campaign" color="product_names" date_start="date_start" date_stop="date_stop">
+                <calendar string="CRM Tracking Campaign" color="object_names" date_start="date_start" date_stop="date_stop">
                     <field name="name"/>
-                    <field name="product_names"/>
+                    <field name="object_names"/>
                 </calendar>
             </field>
         </record>
@@ -160,7 +168,7 @@
                 <search string="CRM Tracking Campaign">
                    <field name="name" string="Name" filter_domain="[('display_name','ilike',self)]"/>
                    <group expand="1" string="Group By">
-                        <filter context="{'group_by' : 'product_ids'}" string="Products"/>
+                        <filter context="{'group_by' : 'object_ids'}" string="Object"/>
                     </group>
                 </search>
             </field>
@@ -168,17 +176,6 @@
 
         <record id="crm.crm_tracking_campaign_act" model="ir.actions.act_window">
             <field name="view_mode">tree,form,calendar,gantt</field>
-        </record>
-
-        <record id="product_template_form_view" model="ir.ui.view">
-            <field name="name">product.template.common.form.inherited.product_crm_campaign</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
-            <field name="arch" type="xml">
-                <separator string="Description for Quotations" position="before">
-                    <field name="campaign_ids" widget="many2many_tags"/>
-                </separator>
-            </field>
         </record>
 
     </data>

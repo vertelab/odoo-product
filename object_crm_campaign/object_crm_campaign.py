@@ -22,29 +22,35 @@ from openerp import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
+class crm_tracking_campaign(models.Model):
+    _inherit = 'crm.tracking.campaign'
+
+    color = fields.Integer('Color Index')
+    date_start = fields.Date(string='Start Date')
+    date_stop = fields.Date(string='Start Stop')
+    object_ids = fields.One2many(comodel_name='object.crm.campaign', inverse_name='campaign_id', string='Objects')
+    description = fields.Text(string='Description')
+    @api.one
+    def _object_names(self):
+        self.object_names = ', '.join(self.object_ids.mapped('name'))
+    object_names = fields.Char(compute='_object_names')
+    @api.one
+    def _object_count(self):
+        self.object_count = len(self.object_ids)
+    object_count = fields.Integer(compute='_object_count')
+
 
 class object_crm_campaign(models.Model):
-    _inherit = 'object.crm.campaign'
+    _name = 'object.crm.campaign'
 
-    object_id = fields.Reference(selection_add=[('product.template', 'Product Template'), ('product.product', 'Product Variant'), ('product.public.category', 'Product Category')])
+    name = fields.Char(string='Name')
+    description = fields.Text(string='Description')
+    image = fields.Binary(string='Image')
+    sequence = fields.Integer()
+    color = fields.Integer('Color Index')
+    campaign_id = fields.Many2one(comodel_name='crm.tracking.campaign', string='Campaign')
+    object_id = fields.Reference(selection=[], string='Obejct')
     @api.one
     @api.onchange('object_id')
     def get_object_value(self):
-        if self.object_id:
-            if self.object_id._name == 'product.template' or self.object_id._name == 'product.product':
-                self.res_id = self.object_id.id
-                self.name = self.object_id.name
-                self.description = self.object_id.description_sale
-                self.image = self.object_id.image
-            if self.object_id._name == 'product.public.category':
-                self.res_id = self.object_id.id
-                self.name = self.object_id.name
-                self.description = self.object_id.description
-                self.image = self.object_id.image
-        return super(object_crm_campaign, self).get_object_value()
-
-
-class product_public_category(models.Model):
-    _inherit = 'product.public.category'
-
-    description = fields.Text(string='Description')
+        return None
