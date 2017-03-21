@@ -30,7 +30,7 @@ Bind together crm.tracking.campaign with product template, variant
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['object_crm_campaign', 'website_sale'],
+    'depends': ['object_crm_campaign', 'website_sale_product_variant'],
     'data': [
         'product_view.xml',
     ],
