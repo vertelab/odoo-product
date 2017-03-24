@@ -66,6 +66,138 @@ res = bg
             <field name="recipe_id" ref="product_imagemagick.img_product_detail"/>
         </record>
 
+        <record id="img_product_thumnail_watermark_left_top" model="image.recipe">
+            <field name="name">Product (Thumbnail) With Watermark Left Top</field>
+            <field name="description">Define the canvas size to limit the image maximum size.
+Define the watermark image.
+Define the watermark image width (watermark image will hold the original ratio).
+PS: The canvas will always be the given size</field>
+            <field name="recipe">bg = Image()
+bg.blank(width=int(canvas_width), height=int(canvas_height), background=Color(bg_color))
+bg.format = 'png'
+image.transform(resize='%sx%s' %(int(canvas_width), int(canvas_height)))
+bg.composite(image, (int(canvas_width)-image.width)/2, (int(canvas_height)-image.height)/2)
+wk_img = Image(filename=wk)
+wk_img.transform(resize='%sx%s' %(int(wk_canvas_width), (int(wk_canvas_height))))
+bg.watermark(wk_img, transparency=float(wk_trans), left=int(wk_margin_to_frame), top=int(wk_margin_to_frame))
+res = bg
+            </field>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_canvas_width" model="image.recipe.param">
+            <field name="name">canvas_width</field>
+            <field name="value">250</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_canvas_height" model="image.recipe.param">
+            <field name="name">canvas_height</field>
+            <field name="value">250</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_bg_color" model="image.recipe.param">
+            <field name="name">bg_color</field>
+            <field name="value">#FFC90C</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_wk" model="image.recipe.param">
+            <field name="name">wk</field>
+            <field name="value">/usr/share/odoo-addons/addons/base/static/img/main_partner-image.png</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_wk_trans" model="image.recipe.param">
+            <field name="name">wk_trans</field>
+            <field name="value">0</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_wk_canvas_width" model="image.recipe.param">
+            <field name="name">wk_canvas_width</field>
+            <field name="value">50</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_wk_canvas_height" model="image.recipe.param">
+            <field name="name">wk_canvas_height</field>
+            <field name="value">50</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_thumnail_watermark_left_top_param_wk_margin_to_frame" model="image.recipe.param">
+            <field name="name">wk_margin_to_frame</field>
+            <field name="value">15</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_thumnail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top" model="image.recipe">
+            <field name="name">Product (Detail) With Watermark Left Top</field>
+            <field name="description">Define the canvas size to limit the image maximum size.
+Define the watermark image.
+Define the watermark image width (watermark image will hold the original ratio).
+PS: The canvas will always be the given size</field>
+            <field name="recipe">bg = Image()
+bg.blank(width=int(canvas_width), height=int(canvas_height), background=Color(bg_color))
+bg.format = 'png'
+image.transform(resize='%sx%s' %(int(canvas_width), int(canvas_height)))
+bg.composite(image, (int(canvas_width)-image.width)/2, (int(canvas_height)-image.height)/2)
+wk_img = Image(filename=wk)
+wk_img.transform(resize='%sx%s' %(int(wk_canvas_width), (int(wk_canvas_height))))
+bg.watermark(wk_img, transparency=float(wk_trans), left=int(wk_margin_to_frame), top=int(wk_margin_to_frame))
+res = bg
+            </field>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_canvas_width" model="image.recipe.param">
+            <field name="name">canvas_width</field>
+            <field name="value">500</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_canvas_height" model="image.recipe.param">
+            <field name="name">canvas_height</field>
+            <field name="value">500</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_bg_color" model="image.recipe.param">
+            <field name="name">bg_color</field>
+            <field name="value">#FFC90C</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_wk" model="image.recipe.param">
+            <field name="name">wk</field>
+            <field name="value">/usr/share/odoo-addons/addons/base/static/img/main_partner-image.png</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_wk_trans" model="image.recipe.param">
+            <field name="name">wk_trans</field>
+            <field name="value">0</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_wk_canvas_width" model="image.recipe.param">
+            <field name="name">wk_canvas_width</field>
+            <field name="value">100</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_wk_canvas_height" model="image.recipe.param">
+            <field name="name">wk_canvas_height</field>
+            <field name="value">100</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
+        <record id="img_product_detail_watermark_left_top_param_wk_margin_to_frame" model="image.recipe.param">
+            <field name="name">wk_margin_to_frame</field>
+            <field name="value">30</field>
+            <field name="recipe_id" ref="product_imagemagick.img_product_detail_watermark_left_top"/>
+        </record>
+
         <record id="img_product_thumnail_watermark_right_bottom" model="image.recipe">
             <field name="name">Product (Thumbnail) With Watermark Right Bottom</field>
             <field name="description">Define the canvas size to limit the image maximum size.
