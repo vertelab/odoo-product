@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!-- action -->
+    <record id="product_action_form_view" model="ir.ui.view">
+      <field name="name">product.action.form</field>
+      <field name="model">product.action</field>
+      <field name="inherit_id" ref="product_action.product_action_form_view"/>
+      <field name="arch" type="xml">
+         <field name='action_type' position='after'>
+              <field name="onoff_website_published" widget="website_button" attrs="{'invisible': [('action_type', '!=', 'website_published')]}" />
+        </field>
+      </field>
+    </record>
+  </data>
+</openerp>
