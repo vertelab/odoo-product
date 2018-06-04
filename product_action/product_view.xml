@@ -20,10 +20,8 @@
     </record>
     <!-- product product -->
     <record id="product_normal_form_view" model="ir.ui.view">
-      <field name="name">product.product.form</field>
+      <field name="name">product.product.form.action</field>
       <field name="model">product.product</field>
-      <field name="mode">primary</field>
-      <field eval="7" name="priority" />
       <field name="inherit_id" ref="product.product_normal_form_view" />
       <field name="arch" type="xml">
         <xpath expr="//div[@name='buttons']" position="inside">
@@ -37,6 +35,19 @@
       </field>
     </record>
     <!-- action -->
+    <record id="product_action_search_view" model="ir.ui.view">
+      <field name="name">product.action.search</field>
+      <field name="model">product.action</field>
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="product_id" />
+          <field name="date" />
+          <field name="action_type" />
+        </search>
+      </field>
+    </record>
+    
     <record id="product_action_tree_view" model="ir.ui.view">
       <field name="name">product.action.tree</field>
       <field name="model">product.action</field>
@@ -71,8 +82,8 @@
       <field name="model">product.action</field>
       <field name="arch" type="xml">
         <calendar string="Calendar View" date_start="date">
-          <field name="date" />
           <field name="action_type" />
+          <field name="action_str" />
         </calendar>
       </field>
     </record>

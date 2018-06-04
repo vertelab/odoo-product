@@ -57,7 +57,8 @@ class product_action(models.Model):
         if self.action_type == 'sale_ok':
             self.action_str = _('On') if self.onoff else _('Off')
         if self.action_type == 'state':
-            self.action_str = [type for type,text in self.fields_get(['state'])['state']['selection'] if text == value][0] if self.state else ''
+            _logger.warn([text for type,text in self.fields_get(['state'])['state']['selection'] if type == 'draft'])
+            self.action_str = [text for type,text in self.fields_get(['state'])['state']['selection'] if type == self.state][0] if self.state else ''
         if self.action_type == 'product_manager':
             self.action_str = self.product_manager.name if self.product_manager else ''
         if self.action_type == 'code':
@@ -93,16 +94,18 @@ class product_action(models.Model):
         if self.action_type == 'state':
             self.product_id.state = self.state
         if self.action_type == 'code':
-            safe_eval(self.code, self.get_eval_context())
+            safe_eval(self.code, self.get_eval_context(),mode='exec')
         
     @api.model
-    def cron_job(self, cr, uid, context=None):
+    def cron_job(self):
+        _logger.error('---->>>> cron for product.action')
         for action in self.env['product.action'].search([('date','=',fields.Date.today())]):
-            action_type = [type for type,text in action.fields_get(['state'])['state']['selection'] if text == value][0] if action.state else ''
+         
+            action_type = [text for type,text in action.fields_get(['action_type'])['action_type']['selection'] if type == action.action_type][0] if action.action_type else ''
             try:
                 self.do_action()
                 self.env['mail.message'].create({
-                    'body': _("{type} <a href='/web#model={model}&id={id}'>action</a> was successfully fired ({action_str})\n").format(type=action_type,error=e,model=action._name,id=action.id,action_str=action.action_str),
+                    'body': _("{type} <a href='/web#model={model}&id={id}'>action</a> was successfully fired ({action_str})\n").format(type=action_type,model=action._name,id=action.id,action_str=action.action_str),
                     'subject': 'Product Action %s' % action_type,
                     'author_id': self.env['res.users'].browse(self.env.uid).partner_id.id,
                     'res_id': action.product_id.id,
