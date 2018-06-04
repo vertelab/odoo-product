@@ -30,6 +30,7 @@ Product Sheets for print
 Financed by Runex AB
        """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['product', 'report_scribus'],
     'data': ['product_sheet_report.xml'],
