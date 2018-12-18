@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data noupdate="1">
+    <record id="seq_type_product_no" model="ir.sequence.type">
+      <field name="name">Product Number</field>
+      <field name="code">product.product.no</field>
+    </record>
+    <record id="seq_product_no" model="ir.sequence">
+      <field name="name">Product Number</field>
+      <field name="code">product.no</field>
+      <field name="prefix" />
+      <field name="padding">5</field>
+      <field name="company_id" eval="False" />
+    </record>
+    <record model="ir.actions.server" id="action_create_product_no">
+      <field name="name">Generate Product Number</field>
+      <field name="state">code</field>
+      <field name="condition" eval="True" />
+      <field name="model_id" ref="base.model_product_product" />
+      <field name="code">
+        obj = object.browse(context.get('active_ids', []))
+        for o in obj:
+        o.generate_new_product_no()
+      </field>
+    </record>
+    <record model="ir.values" id="product_no_action_menu">
+      <field name="name">Generate Product Number</field>
+      <field name="model">product.product</field>
+      <field name="model_id" ref="base.model_product_product" />
+      <field name="key2">client_action_multi</field>
+      <field name="value" eval="'ir.actions.server,%d' % action_create_product_no" />
+    </record>
+  </data>
+</openerp>
