@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_packaging_template_tree" model="ir.ui.view">
+            <field name="name">product.packaging.template.tree.view</field>
+            <field name="model">product.packaging.template</field>
+            <field name="arch" type="xml">
+                <tree string="Packaging Templates">
+                    <field name="priority" widget="handle" />
+                    <field name="name" />
+                    <field name="qty" />
+                    <field name="ul" />
+                    <field name="ul_container" />
+                </tree>
+            </field>
+        </record>
+        <record id="view_packaging_template_form" model="ir.ui.view">
+            <field name="name">product.packaging.template.form.view</field>
+            <field name="model">product.packaging.template</field>
+            <field name="arch" type="xml">
+                <form string="Packaging Template">
+                    <header>
+                        <button type="object" name="update_packaging_data" string="Update packaging data" />
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <group name="template_data" col="4" string="Template Data">
+                            <field name="priority" />
+                            <field name="allow_multiple" />
+                            <field name="volume" />
+                        </group>
+                        <group name="packaging_data" col="4" string="Packaging Data">
+                            <field name="sequence" />
+                            <field name="qty" />
+                            <field name="ul" />
+                            <separator colspan="4" string="Palletization" />
+                            <field name="ul_container" />
+                            <field name="ul_qty" />
+                            <field name="rows" />
+                            <field name="weight" />
+                            <separator colspan="4" string="Other Info" />
+                            <field name="uom_id" />
+                            <newline/>
+                            <field colspan="4" name="description" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <act_window
+            id="packaging_template_action"
+            name="Packaging Templates"
+            res_model="product.packaging.template"
+            view_id="view_packaging_template_tree"
+            view_mode="tree,form"
+            view_type="form" />
+        <menuitem id="packaging_template_menu" name="Packaging Templates" action="packaging_template_action" parent="base.menu_base_config" sequence="31"/>
+        <record id="product_packaging_form_view" model="ir.ui.view">
+            <field name="name">product.packaging.form.view.template</field>
+            <field name="model">product.packaging</field>
+            <field name="inherit_id" ref="product.product_packaging_form_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="uom_id"/>
+                    <newline/>
+                </field>
+            </field>
+        </record>
+        <record id="product_packaging_form_view_without_product" model="ir.ui.view">
+            <field name="name">product.packaging.form.view.template.without.product</field>
+            <field name="model">product.packaging</field>
+            <field name="inherit_id" ref="product.product_packaging_form_view_without_product"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="uom_id"/>
+                    <newline/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
