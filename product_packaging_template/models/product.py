@@ -101,7 +101,7 @@ class ProductPackagingTemplate(models.Model):
     @api.one
     def _get_total(self):
         try:
-         self.volume = self.width * self.height + self.depth
+         self.volume = self.width * self.height * self.depth
         except:
              raise "here add your exceptions"
             
