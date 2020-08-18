@@ -21,6 +21,7 @@
 
 from openerp import models, fields, api, _
 import openerp.exceptions
+import openerp.addons.decimal_precision as decpre
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -54,6 +55,9 @@ class ProductPackagingTemplate(models.Model):
     ul_qty = fields.Integer(string='Package by layer')
     rows = fields.Integer(string='Number of layers', required=True)
     weight = fields.Float(string='Total Package Weight')
+    width = fields.Float('Width (cm)', digits_compute= decpre.get_precision('Product Unit of Measure'), help='Product width in cm')
+    height = fields.Float('Height (cm)', digits_compute= decpre.get_precision('Product Unit of Measure'), help='Product height in cm')
+    depth = fields.Float('Depth (cm)', digits_compute= decpre.get_precision('Product Unit of Measure'), help='Product depth in cm')
     # Product matching data
     priority = fields.Integer(
         string='Priority',
@@ -67,7 +71,7 @@ class ProductPackagingTemplate(models.Model):
         string='Allow Multiple Package Types',
         help="Check this box if this package type if this package should be allowed "
         "to be used among others. Leave empty if this must be the only package.")
-    volume = fields.Float(string='Volume')
+    volume = fields.Float(compute='_get_total', string="Volume")
     # DFP data
     uom_id = fields.Many2one(
         comodel_name='product.uom',
@@ -92,7 +96,15 @@ class ProductPackagingTemplate(models.Model):
     @api.model
     def _match_packaging_template_domain(self, product):
         """Return a domain to match a product to packaging templates."""
-        return [('volume', '=', product.volume)]
+        # return [('volume', '=', product.volume)]
+
+    @api.one
+    def _get_total(self):
+        try:
+         self.volume = self.width * self.height + self.depth
+        except:
+             raise "here add your exceptions"
+            
 
     @api.multi
     def _apply_packaging_template_domain(self, product):

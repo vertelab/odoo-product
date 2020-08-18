@@ -29,7 +29,10 @@
                         <group name="template_data" col="4" string="Template Data">
                             <field name="priority" />
                             <field name="allow_multiple" />
-                            <field name="volume" />
+                            <field name="volume" readonly="1" />
+                            <field name="width"/>
+                            <field name="height"/>
+                            <field name="depth"/>
                         </group>
                         <group name="packaging_data" col="4" string="Packaging Data">
                             <field name="sequence" />
