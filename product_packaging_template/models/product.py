@@ -71,7 +71,7 @@ class ProductPackagingTemplate(models.Model):
         string='Allow Multiple Package Types',
         help="Check this box if this package type if this package should be allowed "
         "to be used among others. Leave empty if this must be the only package.")
-    volume = fields.Float(compute='_get_total', string="Volume")
+    volume = fields.Float(compute='_get_total', string="Volume (cm3)")
     # DFP data
     uom_id = fields.Many2one(
         comodel_name='product.uom',
