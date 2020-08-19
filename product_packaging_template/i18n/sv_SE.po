@@ -250,8 +250,8 @@ msgstr "Enheter"
 
 #. module: product_packaging_template
 #: field:product.packaging.template,volume:0
-msgid "Volume"
-msgstr "Volym"
+msgid "Volume (cm3)"
+msgstr "Volym (cm3)"
 
 #. module: product_packaging_template
 #: view:sale.order:product_packaging_template.view_order_form_packaging_template
