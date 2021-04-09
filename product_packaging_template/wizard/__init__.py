@@ -1,1 +1,0 @@
-import apply_packaging_template
