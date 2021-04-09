@@ -1,0 +1,14 @@
+<odoo>
+    <record id="product_variant_parent_link_view" model="ir.ui.view">
+            <field name="name">product.product.form.link</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                    <field name="name" attrs="{'invisible': [('id', '!=', False)]}"/>
+                    <field name="product_tmpl_id" class="oe_inline" readonly="1" attrs="{'invisible': [('id', '=', False)], 'required': [('id', '!=', False)]}"/>
+                </field>
+            </field>
+    </record>
+</odoo>
+
