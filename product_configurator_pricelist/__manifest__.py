@@ -17,7 +17,9 @@
         'sale',
         'product',
     ],
-    'data': [],
+    'data': [
+        'views/product_attribute_value_views.xml',
+    ],
     'demo': [],
     'application': False,
     'installable': True,

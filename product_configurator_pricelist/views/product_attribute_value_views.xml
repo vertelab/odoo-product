@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="product_attribute_value_tree_inherit_pricelist" model="ir.ui.view">
+        <field name="name">product.attribute.value.list.inherit.pricelist</field>
+        <field name="model">product.attribute.value</field>
+        <field name="inherit_id" ref="product_configurator.product_attribute_value_list" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='attribute_id']" position="after">
+                <field name="product_id" optional="hide" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_attribute_value_form_inherit_pricelist" model="ir.ui.view">
+        <field name="name">product.attribute.value.form.inherit.pricelist</field>
+        <field name="model">product.attribute.value</field>
+        <field name="inherit_id" ref="product_configurator.product_attribute_value_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='attribute_id']" position="after">
+                <field name="product_id" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_attribute_inline_value_inherit_pricelist" model="ir.ui.view">
+        <field name="name">product.attribute.inline.value.inherit.pricelist</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id" ref="product.product_attribute_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_extra_price']" position="after">
+                <field name="product_id" optional="hide" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_attribute_value_tree_inherit_pricelist" model="ir.ui.view">
+        <field name="name">product.template.attribute.value.tree.inherit.pricelist</field>
+        <field name="model">product.template.attribute.value</field>
+        <field name="inherit_id" ref="product.product_template_attribute_value_view_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='price_extra']" position="after">
+                <field name="product_id" optional="hide" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_attribute_value_form_inherit_pricelist" model="ir.ui.view">
+        <field name="name">product.template.attribute.value.form.inherit.pricelist</field>
+        <field name="model">product.template.attribute.value</field>
+        <field name="inherit_id" ref="product.product_template_attribute_value_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='price_extra']" position="after">
+                <field name="product_id" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

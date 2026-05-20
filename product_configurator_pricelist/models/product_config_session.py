@@ -1,12 +1,51 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class ProductConfigSession(models.Model):
     _inherit = "product.config.session"
 
+    def _get_session_pricelist(self):
+        self.ensure_one()
+        sale_line = self.env["sale.order.line"].search(
+            [("config_session_id", "=", self.id)], limit=1
+        )
+        if sale_line and sale_line.order_id.pricelist_id:
+            return sale_line.order_id.pricelist_id
+        return self.env.user.property_product_pricelist
+
+    def _compute_currency_id(self):
+        main_company = self.env["res.company"]._get_main_company()
+        for session in self:
+            pricelist = session._get_session_pricelist()
+            if pricelist:
+                session.currency_id = pricelist.currency_id
+            else:
+                template = session.product_tmpl_id
+                session.currency_id = (
+                    template.company_id.sudo().currency_id.id
+                    or main_company.currency_id.id
+                )
+
+    @api.depends(
+        "value_ids",
+        "product_tmpl_id.list_price",
+        "product_tmpl_id.attribute_line_ids",
+        "product_tmpl_id.attribute_line_ids.value_ids",
+        "product_tmpl_id.attribute_line_ids.product_template_value_ids",
+        "product_tmpl_id.attribute_line_ids.product_template_value_ids.price_extra",
+    )
+    def _compute_cfg_price(self):
+        for session in self:
+            if session.product_tmpl_id:
+                pricelist = session._get_session_pricelist()
+                price = session.get_cfg_price(pricelist=pricelist)
+            else:
+                price = 0.00
+            session.price = price
+
     def get_cfg_price(self, value_ids=None, custom_vals=None, pricelist=None):
         if pricelist is None:
-            pricelist = self.env.user.property_product_pricelist
+            pricelist = self._get_session_pricelist()
 
         product_tmpl = self.product_tmpl_id
 
@@ -32,4 +71,14 @@ class ProductConfigSession(models.Model):
         )
         price_extra = sum(extra_prices.values())
 
-        return base_price + price_extra
+        total = base_price + price_extra
+
+        if pricelist and self.currency_id and pricelist.currency_id != self.currency_id:
+            total = pricelist.currency_id._convert(
+                total,
+                self.currency_id,
+                product_tmpl.company_id or self.env.company,
+                fields.Date.today(),
+            )
+
+        return total
