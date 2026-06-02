@@ -26,6 +26,15 @@ class ProductConfigSession(models.Model):
                     or main_company.currency_id.id
                 )
 
+    def _get_session_partner(self):
+        self.ensure_one()
+        sale_line = self.env["sale.order.line"].search(
+            [("config_session_id", "=", self.id)], limit=1
+        )
+        if sale_line and sale_line.order_id.partner_id:
+            return sale_line.order_id.partner_id
+        return self.env.user.partner_id
+
     @api.depends(
         "value_ids",
         "product_tmpl_id.list_price",
@@ -38,29 +47,21 @@ class ProductConfigSession(models.Model):
         for session in self:
             if session.product_tmpl_id:
                 pricelist = session._get_session_pricelist()
-                price = session.get_cfg_price(pricelist=pricelist)
+                partner = session._get_session_partner()
+                price = session.get_cfg_price(pricelist=pricelist, partner=partner)
             else:
                 price = 0.00
             session.price = price
 
-    def get_cfg_price(self, value_ids=None, custom_vals=None, pricelist=None):
-        if pricelist is None:
-            pricelist = self._get_session_pricelist()
-
+    def get_cfg_price(self, value_ids=None, custom_vals=None, pricelist=None, partner=None):
         product_tmpl = self.product_tmpl_id
-
-        base_product = product_tmpl.product_variant_id
-        if pricelist and base_product:
-            base_price = pricelist._get_product_price(
-                base_product,
-                1.0,
-                self.env.user.partner_id,
-            )
-        else:
-            base_price = product_tmpl.list_price
+        base_price = product_tmpl.list_price
 
         if value_ids is None:
             value_ids = self.value_ids.ids
+        
+        if not partner:
+            partner = self.env.user.partner_id
 
         attr_val_obj = self.env["product.attribute.value"]
         av_ids = attr_val_obj.browse(value_ids)
@@ -68,6 +69,7 @@ class ProductConfigSession(models.Model):
             product_tmpl_id=product_tmpl.id,
             pt_attr_value_ids=av_ids,
             pricelist=pricelist,
+            partner=partner,
         )
         price_extra = sum(extra_prices.values())
 
