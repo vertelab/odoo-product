@@ -9,6 +9,8 @@ class SaleOrderLine(models.Model):
         "config_session_id.value_ids",
         "config_session_id.product_tmpl_id",
         "order_id.pricelist_id",
+        "product_id",
+        "product_uom_qty",
         "tax_id",
         "company_id",
     )
@@ -19,12 +21,13 @@ class SaleOrderLine(models.Model):
                 product_tmpl = session.product_tmpl_id
                 pricelist = line.order_id.pricelist_id
 
-                base_product = product_tmpl.product_variant_id
+                qty = line.product_uom_qty or 1.0
+                date = line.order_id.date_order or fields.Date.today()
+
+                base_product = line.product_id or product_tmpl.product_variant_id
                 if pricelist and base_product:
                     base_price = pricelist._get_product_price(
-                        base_product,
-                        1.0,
-                        line.order_id.partner_id,
+                        base_product, qty, date=date
                     )
                 else:
                     base_price = product_tmpl.list_price
@@ -36,18 +39,15 @@ class SaleOrderLine(models.Model):
                     pt_attr_value_ids=av_ids,
                     pricelist=pricelist,
                     partner=line.order_id.partner_id,
+                    date=date,
                 )
                 price_extra = sum(extra_prices.values())
 
                 total = base_price + price_extra
 
-                if pricelist and session.currency_id and pricelist.currency_id != session.currency_id:
-                    total = pricelist.currency_id._convert(
-                        total,
-                        session.currency_id,
-                        product_tmpl.company_id or line.company_id,
-                        fields.Date.today(),
-                    )
+                session.price = total
+                if pricelist:
+                    session.currency_id = pricelist.currency_id
 
                 line.price_unit = self.env[
                     "account.tax"

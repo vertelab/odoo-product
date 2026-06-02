@@ -1,4 +1,4 @@
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class ProductAttributeValue(models.Model):
@@ -6,13 +6,15 @@ class ProductAttributeValue(models.Model):
 
     @api.model
     def get_attribute_value_extra_prices(
-        self, product_tmpl_id, pt_attr_value_ids, pricelist=None, partner=None
+        self, product_tmpl_id, pt_attr_value_ids, pricelist=None, partner=None, date=None
     ):
         extra_prices = {}
         if not pricelist:
             pricelist = self.env.user.partner_id.property_product_pricelist
         if not partner:
             partner = self.env.user.partner_id
+        if not date:
+            date = fields.Date.today()
 
         ptav_lines = self.env["product.template.attribute.value"].search([
             ("product_attribute_value_id", "in", pt_attr_value_ids.ids),
@@ -26,11 +28,11 @@ class ProductAttributeValue(models.Model):
 
             if ptav and ptav.product_id:
                 extra = pricelist._get_product_price(
-                    ptav.product_id, 1.0, partner
+                    ptav.product_id, 1.0, date=date
                 )
             elif attr_val.product_id:
                 extra = pricelist._get_product_price(
-                    attr_val.product_id, 1.0, partner
+                    attr_val.product_id, 1.0, date=date
                 )
             elif ptav:
                 extra = ptav.price_extra
