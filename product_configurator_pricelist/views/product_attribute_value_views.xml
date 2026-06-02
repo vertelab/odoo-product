@@ -40,7 +40,8 @@
         <field name="inherit_id" ref="product.product_template_attribute_value_view_tree" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='price_extra']" position="after">
-                <field name="product_id" optional="hide" />
+                <field name="use_product_price" optional="show" />
+                <field name="product_id" optional="show" />
             </xpath>
         </field>
     </record>
@@ -50,8 +51,12 @@
         <field name="model">product.template.attribute.value</field>
         <field name="inherit_id" ref="product.product_template_attribute_value_view_form" />
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='price_extra']" position="attributes">
+                <attribute name="invisible">use_product_price</attribute>
+            </xpath>
             <xpath expr="//field[@name='price_extra']" position="after">
-                <field name="product_id" />
+                <field name="use_product_price" />
+                <field name="product_id" invisible="not use_product_price" />
             </xpath>
         </field>
     </record>

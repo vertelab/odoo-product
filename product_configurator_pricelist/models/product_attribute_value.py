@@ -26,7 +26,7 @@ class ProductAttributeValue(models.Model):
             extra = 0.0
             ptav = ptav_by_attr_val.get(attr_val.id)
 
-            if ptav and ptav.product_id:
+            if ptav and ptav.use_product_price and ptav.product_id:
                 extra = pricelist._get_product_price(
                     ptav.product_id, 1.0, date=date
                 )

@@ -11,6 +11,7 @@ class SaleOrderLine(models.Model):
         "order_id.pricelist_id",
         "product_id",
         "product_uom_qty",
+        "product_uom",
         "tax_id",
         "company_id",
     )
@@ -18,32 +19,17 @@ class SaleOrderLine(models.Model):
         for line in self:
             if line.config_session_id:
                 session = line.config_session_id
-                product_tmpl = session.product_tmpl_id
                 pricelist = line.order_id.pricelist_id
 
                 qty = line.product_uom_qty or 1.0
                 date = line.order_id.date_order or fields.Date.today()
 
-                base_product = line.product_id or product_tmpl.product_variant_id
-                if pricelist and base_product:
-                    base_price = pricelist._get_product_price(
-                        base_product, qty, date=date
-                    )
-                else:
-                    base_price = product_tmpl.list_price
-
-                attr_val_obj = self.env["product.attribute.value"]
-                av_ids = session.value_ids
-                extra_prices = attr_val_obj.get_attribute_value_extra_prices(
-                    product_tmpl_id=product_tmpl.id,
-                    pt_attr_value_ids=av_ids,
+                total = session.get_cfg_price(
                     pricelist=pricelist,
                     partner=line.order_id.partner_id,
                     date=date,
+                    quantity=qty,
                 )
-                price_extra = sum(extra_prices.values())
-
-                total = base_price + price_extra
 
                 session.price = total
                 if pricelist:

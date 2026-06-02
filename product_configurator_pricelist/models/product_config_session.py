@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from odoo.tools import float_round
 
 
 class ProductConfigSession(models.Model):
@@ -69,14 +70,17 @@ class ProductConfigSession(models.Model):
                 price = 0.00
             session.price = price
 
-    def get_cfg_price(self, value_ids=None, custom_vals=None, pricelist=None, partner=None, date=None):
+    def get_cfg_price(self, value_ids=None, custom_vals=None, pricelist=None, partner=None, date=None, quantity=1.0):
         product_tmpl = self.product_tmpl_id
 
         if value_ids is None:
             value_ids = self.value_ids.ids
 
+        if not pricelist:
+            pricelist = self._get_session_pricelist()
+
         if not partner:
-            partner = self.env.user.partner_id
+            partner = self._get_session_partner()
 
         if not date:
             date = fields.Date.today()
@@ -88,7 +92,7 @@ class ProductConfigSession(models.Model):
         base_product = product_tmpl._get_variant_for_combination(ptav_lines) or product_tmpl.product_variant_id
         if pricelist and base_product:
             base_price = pricelist._get_product_price(
-                base_product, 1.0, date=date
+                base_product, quantity, date=date
             )
         else:
             base_price = product_tmpl.list_price
@@ -105,5 +109,7 @@ class ProductConfigSession(models.Model):
         price_extra = sum(extra_prices.values())
 
         total = base_price + price_extra
+        price_precision = self.env["decimal.precision"].precision_get("Product Price")
+        total = float_round(total, precision_digits=price_precision)
 
         return total
