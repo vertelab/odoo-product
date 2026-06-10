@@ -105,6 +105,7 @@ class ProductConfigSession(models.Model):
             pricelist=pricelist,
             partner=partner,
             date=date,
+            quantity=quantity,
         )
         price_extra = sum(extra_prices.values())
 

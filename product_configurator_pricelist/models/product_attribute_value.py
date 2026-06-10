@@ -6,7 +6,7 @@ class ProductAttributeValue(models.Model):
 
     @api.model
     def get_attribute_value_extra_prices(
-        self, product_tmpl_id, pt_attr_value_ids, pricelist=None, partner=None, date=None
+        self, product_tmpl_id, pt_attr_value_ids, pricelist=None, partner=None, date=None, quantity=1.0
     ):
         extra_prices = {}
         if not pricelist:
@@ -28,11 +28,11 @@ class ProductAttributeValue(models.Model):
 
             if ptav and ptav.use_product_price and ptav.product_id:
                 extra = pricelist._get_product_price(
-                    ptav.product_id, 1.0, date=date
+                    ptav.product_id, quantity, date=date
                 )
             elif attr_val.product_id:
                 extra = pricelist._get_product_price(
-                    attr_val.product_id, 1.0, date=date
+                    attr_val.product_id, quantity, date=date
                 )
             elif ptav:
                 extra = ptav.price_extra
