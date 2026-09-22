@@ -9,7 +9,7 @@
     """,
     'category': 'Sales',
     'author': 'Vertel AB',
-    'website': 'https://vertel.se',
+    'website': 'https://vertel.se/apps/odoo-product/product_configurator_pricelist',
     'license': 'AGPL-3',
     'depends': [
         'product_configurator',
